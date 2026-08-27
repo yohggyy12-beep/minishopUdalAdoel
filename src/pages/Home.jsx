@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import ProdukCard from '../components/ProdukCard'
+import { daftarProduk } from '../data/produk'
 
 const PER_HALAMAN = 8
 
@@ -34,7 +35,9 @@ function Home() {
         setLoading(false)
       })
       .catch((err) => {
-        setError(err.message)
+        setProduk(daftarProduk)
+        setKategoriList([])
+        setError(null)
         setLoading(false)
       })
   }, [])
@@ -57,19 +60,16 @@ function Home() {
     <div>
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <input
-          placeholder="Cari produk..."
-          value={kataKunci}
-          onChange={(e) => { setKataKunci(e.target.value); setHalaman(1) }}
-          className="border rounded-md px-3 py-2 flex-1"
-        />
+            placeholder="Cari produk..."
+            value={kataKunci}
+            onChange={(e) => { setKataKunci(e.target.value); setHalaman(1) }}
+            className="border border-gray-200 bg-white rounded-xl px-4 py-2.5 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
         <select
-          value={kategori}
-          onChange={(e) => { setKategori(e.target.value); setHalaman(1) }}
-          className="border rounded-md px-3 py-2"
-        >
-          <option value="semua">Semua Kategori</option>
-          {kategoriList.map((k) => <option key={k} value={k}>{k}</option>)}
-        </select>
+            value={kategori}
+            onChange={(e) => { setKategori(e.target.value); setHalaman(1) }}
+            className="border border-gray-200 bg-white rounded-xl px-4 py-2.5 min-w-[180px] focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
       </div>
 
       {produkDitampilkan.length === 0 ? (

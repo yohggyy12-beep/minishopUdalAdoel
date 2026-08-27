@@ -14,6 +14,7 @@ function Keranjang() {
     riwayat.push({ id: Date.now(), tanggal: new Date().toISOString(), item, total })
     localStorage.setItem('riwayat', JSON.stringify(riwayat))
     kosongkanKeranjang()
+    alert('Pesanan berhasil dibuat!')
     navigate('/riwayat')
   }
 
@@ -39,7 +40,16 @@ function Keranjang() {
             <button onClick={() => ubahJumlah(p.id, p.qty - 1)} className="border rounded px-2">-</button>
             <span>{p.qty}</span>
             <button onClick={() => ubahJumlah(p.id, p.qty + 1)} className="border rounded px-2">+</button>
-            <button onClick={() => hapusDariKeranjang(p.id)} className="text-red-600 text-sm ml-2">Hapus</button>
+            <button
+              onClick={() => {
+                if (window.confirm(`Hapus ${p.nama} dari keranjang?`)) {
+                  hapusDariKeranjang(p.id)
+                }
+              }}
+              className="text-red-600 text-sm ml-2"
+            >
+              Hapus
+            </button>
           </div>
         </div>
       ))}

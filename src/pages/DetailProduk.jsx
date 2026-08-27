@@ -8,6 +8,7 @@ function DetailProduk() {
   const { id } = useParams()
   const [produk, setProduk] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const { tambahKeKeranjang } = useKeranjang()
 
   useEffect(() => {
@@ -24,11 +25,19 @@ function DetailProduk() {
         })
         setLoading(false)
       })
-      .catch(() => setLoading(false))
+     .catch(() => {
+        setError(true)
+        setLoading(false)
+      })
   }, [id])
 
   if (loading) return <p>Memuat...</p>
-  if (!produk) return <p>Produk tidak ditemukan</p>
+  if (error || !produk) return (
+  <div className="text-center py-10">
+    <p className="text-gray-500 mb-4">Produk tidak ditemukan atau gagal dimuat.</p>
+    <Link to="/" className="text-blue-600">Kembali ke Beranda</Link>
+  </div>
+)
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -39,7 +48,10 @@ function DetailProduk() {
           <h2 className="text-2xl font-bold">{produk.nama}</h2>
           <p className="text-xl text-gray-700 mt-2">Rp {produk.harga.toLocaleString("id-ID")}</p>
           <p className="text-gray-500 mt-3">{produk.deskripsi}</p>
-          <Button className="mt-4" onClick={() => tambahKeKeranjang(produk)}>Tambah ke Keranjang</Button>
+          <Button className="mt-4" onClick={() => {
+            tambahKeKeranjang(produk)
+            alert(`${produk.nama} ditambahkan ke keranjang`)
+          }}>Tambah ke Keranjang</Button>
         </div>
       </div>
     </div>

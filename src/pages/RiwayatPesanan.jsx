@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { formatRupiah } from '../utils/format'
 
 // Halaman terproteksi (Minggu 14) untuk melihat riwayat checkout
 function RiwayatPesanan() {
@@ -21,7 +22,7 @@ function RiwayatPesanan() {
           <ul className="text-sm my-2 list-disc list-inside">
             {r.item.map((p) => <li key={p.id}>{p.nama} x{p.qty}</li>)}
           </ul>
-          <p className="font-semibold">Total: Rp {r.total.toLocaleString("id-ID")}</p>
+          <p className="font-semibold">Total: {formatRupiah(r.total)}</p>
         </div>
       ))}
     </div>

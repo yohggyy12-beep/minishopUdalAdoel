@@ -3,13 +3,27 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 
 const AuthContext = createContext()
 
-// Minggu 14: AuthContext menyimpan status login pengguna (disederhanakan,
-// tanpa backend sungguhan - cocok untuk latihan)
 export function AuthProvider({ children }) {
   const [user, setUser] = useLocalStorage('user', null)
+  const [daftarAkun, setDaftarAkun] = useLocalStorage('akun', [])
 
-  function login(email) {
+  function register(email, password) {
+    const sudahAda = daftarAkun.find((a) => a.email === email)
+    if (sudahAda) {
+      return { sukses: false, pesan: 'Email sudah terdaftar' }
+    }
+    setDaftarAkun((prev) => [...prev, { email, password }])
     setUser({ email })
+    return { sukses: true }
+  }
+
+  function login(email, password) {
+    const akun = daftarAkun.find((a) => a.email === email && a.password === password)
+    if (!akun) {
+      return { sukses: false, pesan: 'Email atau password salah' }
+    }
+    setUser({ email })
+    return { sukses: true }
   }
 
   function logout() {
@@ -17,7 +31,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   )
